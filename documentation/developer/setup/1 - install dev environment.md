@@ -1,10 +1,12 @@
-# CognitiveFactory dev environment
+# CognitiveFactory : install dev environment
+
+Procedure last updated : 23-09-2018
 
 ## VisualStudio 2017, ASP.Net Core 2.2 and Blazor
 
-1. Download [Visual Studio Community 2017](https://visualstudio.microsoft.com/fr/downloads/) [v15.8.5]
+1. Download [Visual Studio Community 2017 **preview**](https://visualstudio.microsoft.com/preview/) [v15.9.0 preview 2]
 
-2. Install the ".Net Core cross-platform development" and the "ASP.Net and web development" workloads
+2. Install the ".Net Core cross-platform development" workload
 
 3. Download and install the following Visual Studio Extensions
 - [Github Extensions](https://visualstudio.github.com/) [v2.5.5.3913]
@@ -13,6 +15,14 @@
 4. Install [.Net Core SDK 2.2](https://www.microsoft.com/net/download/dotnet-core/2.2) [v2.2.100-preview2]
 
 5. Install the [ASP.Net Core Blazor Language Services](https://marketplace.visualstudio.com/items?itemName=aspnet.blazor) [v15.7.10384] for Blazor v0.5.1 
+
+6. Download and install [Postman for Windows](https://www.getpostman.com/apps) [v6.3.0] to test the APIs
+- launch postman
+- create a free account / confirm your email
+- select debugging and manual testing
+- skip team
+- file / settings / disable ssl certificate verification
+- create a new collection "CognitiveFactory platform tests"
 
 ## OKD (Openshift origin) - minishift
 
@@ -88,13 +98,23 @@ Connection URL: mysql://mysql:3306/
 - Save
 - Just below the Traffic header, note the Route/NodePort number, for example : 32396
 
-6. Install [MySQL for Visual Studio](https://dev.mysql.com/downloads/installer/) [v8.0.12]
+6. Install [MySQL workbench and MySQL for Visual Studio](https://dev.mysql.com/downloads/installer/) [v8.0.12]
 - download and execute mysql-installer-web-community-8.0.12.0.msi
 - select Custom setup type
-- select "MySQL for Visual Studio 1.2.8" to be installed
+- select "MySQL workbench 8.0.12" and "MySQL for Visual Studio 1.2.8" to be installed
 
-7. Connect Visual Studio to MySQL running inside OpenShift
-- Open Visual Studio
+7. Launch MySQL workbench
+- create connection :
+- hostname : openshift.local
+- port : 32396 (port of the mysql service above)
+- user name : root
+- user password : mysqlrootpassword
+- default schema : cognitivefactorydb
+- test connection
+
+8. Connect Visual Studio to MySQL running inside OpenShift
+- NOTE : this will not work in the preview version of Visual Studio, apply only to the stable install of VS 2017
+- Open Visual Studio [main install - not preview version]
 - View menu, display Server Explorer, right-click on Data connections, Add data connection
 - select data source : MySQL Database
 - server name : openshift.local
