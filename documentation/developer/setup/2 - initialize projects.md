@@ -85,5 +85,44 @@ options => options.UseMySql(
 - POST https://localhost:44391/api/solutions, body application/json = {	Name: "Solution1", Description:"First solution" }, / launch / save as "Create solution"
 - Get solutions again
 
-6. Activate and enhance Swagger documentation
-- 
+7. Activate and enhance Swagger documentation
+
+
+## Package the ASP.Net Core API as a docker container
+
+0. Understand how OKD builds work at : 
+- [https://docs.okd.io/3.10/dev_guide/builds/index.html](https://docs.okd.io/3.10/dev_guide/builds/index.html).
+- [https://docs.okd.io/3.10/dev_guide/managing_images.html](https://docs.okd.io/3.10/dev_guide/managing_images.html)
+- [https://docs.okd.io/latest/dev_guide/dev_tutorials/binary_builds.html](https://docs.okd.io/latest/dev_guide/dev_tutorials/binary_builds.html)
+
+1. Create a Dockerfile at the root of the Visual Studio solution
+
+```Dockerfile
+FROM microsoft/dotnet:2.2-sdk-alpine AS build
+WORKDIR /app
+
+# copy csproj and restore as distinct layers
+COPY *.sln .
+COPY CognitiveFactory.Platform.API/*.csproj ./CognitiveFactory.Platform.API/
+RUN dotnet restore
+
+# copy everything else and build app
+COPY CognitiveFactory.Platform.API/. ./CognitiveFactory.Platform.API/
+WORKDIR /app/CognitiveFactory.Platform.API
+RUN dotnet publish -c Release -o out
+
+
+FROM microsoft/dotnet:2.2-aspnetcore-runtime-alpine AS runtime
+WORKDIR /app
+COPY --from=build /app/CognitiveFactory.Platform.API/out ./
+ENTRYPOINT ["dotnet", "CognitiveFactory.Platform.API.dll"]'
+````
+
+2. Declare a new build in the current Openshift project
+> oc new-build --binary=true --name=cognitivefactory-api-build --strategy=docker --to=cognitivefactory-api
+
+3. Start a new build from the solution directory
+> oc start-build cognitivefactory-api-build --follow=true --from-dir=C:\Users\laure\OneDrive\Dev\Github\cognitivefactory\cognitivefactory-platform
+
+4. Start a new service from this image
+> oc new-app cognitivefactory-api

@@ -78,18 +78,19 @@ Close and reopen a command promt (cmd)
 ## MySQL database on Openshift
 
 1. Login to the OKD web console by pointing Chrome at URL https://192.168.99.100:8443 and using developer/developer credentials
-2. Click on "My Project" / Delete project on the right of the screen
-3. Create a new project : "cognitivefactory", "Cognitive Factory", "Cognitive Factory platform"
+
+2. Click on "My Project" / Delete project on the right of the screen, create a new project : "cognitivefactory", "Cognitive Factory", "Cognitive Factory platform"
+
 3. Select MySQL in the services catalog, keep the default config parameters, except for
 - MYSQL connection username/password : mysqluser/mysqluserpassword
 - MYSQL root password : mysqlrootpassword
 - MYSQL database name : cognitivefactorydb
-4. Note the following parameters
 
-Username: mysqluser
-Password: mysqluserpassword
-Database Name: cognitivefactorydb
-Connection URL: mysql://mysql:3306/
+4. Note the following parameters
+- Username: mysqluser
+- Password: mysqluserpassword
+- Database Name: cognitivefactorydb
+- Connection URL: mysql://mysql:3306/
 
 5. Navigate to the "Cognitive Factory" project, in the Overview tab, open the details of the deployment config "mysql, #1" by clicking on >
 - in the NETWORKING section, click on the "mysql" service
@@ -97,6 +98,9 @@ Connection URL: mysql://mysql:3306/
 - replace "type: ClusterIP" with "type: NodePort"
 - Save
 - Just below the Traffic header, note the Route/NodePort number, for example : 32396
+
+Note : you can retrieve the external URL for a service with the following command :
+> minishift openshift service mysql
 
 6. Install [MySQL workbench and MySQL for Visual Studio](https://dev.mysql.com/downloads/installer/) [v8.0.12]
 - download and execute mysql-installer-web-community-8.0.12.0.msi
